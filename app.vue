@@ -10,7 +10,7 @@
 import { onMounted } from 'vue';
 import {detectFace, encodeVideo} from '~/utils/Transforms'
 const chunks = [];
-
+let mediaRecorder;
 let stream = null;
 onMounted(() => {
   
@@ -19,6 +19,7 @@ function stop() {
   stream.getTracks().forEach(function(track) {
   track.stop();
 });
+mediaRecorder.stop()
 }
 async function getMedia(constraints = {
     audio: true,
@@ -31,7 +32,7 @@ async function getMedia(constraints = {
     const videoProcessor = new MediaStreamTrackProcessor({ track: videoTrack });
     const videoGenerator = new MediaStreamTrackGenerator({ kind: "video" });
     const newStream = new MediaStream([videoGenerator])
-    const mediaRecorder = new MediaRecorder(newStream);
+    mediaRecorder = new MediaRecorder(newStream);
     mediaRecorder.onstop = (e) => { 
       const blob = new Blob(chunks, {type: "video/webm"});
       console.log(URL.createObjectURL(blob))
