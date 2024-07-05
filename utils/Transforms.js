@@ -26,12 +26,13 @@ const encodeVideo = new TransformStream({
         this.encoder.configure(this.config);
     },
     async transform(videoFrame, controller) {
-
-      
+        const frame = new VideoFrame(videoFrame)
+        videoFrame.close();
       const encodeOptions = { keyFrame: this.frameCounter % 30 == 0 };
-      this.encoder.encode(videoFrame, encodeOptions);
+      this.encoder.encode(frame, encodeOptions);
       this.frameCounter++;
-      controller.enqueue(videoFrame);
+      controller.enqueue(frame);
+
       },
       flush (controller) {
         this.encoder.flush()
@@ -51,11 +52,15 @@ const encodeVideo = new TransformStream({
       videoFrame.close()
       this.ctx.drawImage(frame,0,0)
       const faces = await this.faceDetector.detect(this.canvas)
-      console.log(faces)
       for (const face of faces) {
-        console.log(face);
+        this.ctx.beginPath(); // Start a new path
+        this.ctx.rect(face.boundingBox.x, face.boundingBox.y, face.boundingBox.width, face.boundingBox.height); // Add a rectangle to the current path
+        this.ctx.stroke(); // Render the path
+
       }
-      controller.enqueue(frame);
+      const vid = new VideoFrame(this.canvas, {timestamp: frame.timestamp})
+      controller.enqueue(vid);
+      frame.close()
       }
   });
 
