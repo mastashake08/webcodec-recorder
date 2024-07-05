@@ -52,10 +52,12 @@ const encodeVideo = new TransformStream({
       videoFrame.close()
       this.ctx.drawImage(frame,0,0)
       const faces = await this.faceDetector.detect(this.canvas)
+      const img = new Image();
+      img.src = "/anon.svg"
       for (const face of faces) {
-        this.ctx.beginPath(); // Start a new path
-        this.ctx.rect(face.boundingBox.x, face.boundingBox.y, face.boundingBox.width, face.boundingBox.height); // Add a rectangle to the current path
-        this.ctx.stroke(); // Render the path
+       
+        this.ctx.drawImage(img, face.boundingBox.x, face.boundingBox.y, face.boundingBox.width, face.boundingBox.height);
+      
 
       }
       const vid = new VideoFrame(this.canvas, {timestamp: frame.timestamp})

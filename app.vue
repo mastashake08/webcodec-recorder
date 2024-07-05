@@ -29,13 +29,15 @@ async function getMedia(constraints = {
   try {
     stream = await navigator.mediaDevices.getUserMedia(constraints);
     const videoTrack = stream.getVideoTracks()[0];
+    const audioTrack = stream.getAudioTracks()[0];
     const videoProcessor = new MediaStreamTrackProcessor({ track: videoTrack });
     const videoGenerator = new MediaStreamTrackGenerator({ kind: "video" });
-    const newStream = new MediaStream([videoGenerator])
+    const newStream = new MediaStream([videoGenerator, audioTrack])
     mediaRecorder = new MediaRecorder(newStream);
     mediaRecorder.onstop = (e) => { 
       const blob = new Blob(chunks, {type: "video/webm"});
-      console.log(URL.createObjectURL(blob))
+      window.open(URL.createObjectURL(blob), '_blank').focus();
+     
     }
     mediaRecorder.ondataavailable = (e) => {
         chunks.push(e.data);
