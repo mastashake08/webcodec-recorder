@@ -4,10 +4,10 @@ const encodeVideo = new TransformStream({
         this.frameCounter = 0;
         this.config = {
             codec: "vp09.00.10.08",
-            width: 640,
-            height: 480,
-            bitrate: 2_000_000, // 2 Mbps
-            framerate: 30,
+            width: 1920,
+            height: 1080,
+            bitrate: 10_000_000, // 10 Mbps
+            framerate: 60,
         };
         this.encoder = new VideoEncoder({
         output(chunk, metadata) {
@@ -42,7 +42,7 @@ const encodeVideo = new TransformStream({
   const detectFace = new TransformStream({
     start(controller) {
       this.faceDetector = new window.FaceDetector();
-      this.canvas = new OffscreenCanvas(640,480);
+      this.canvas = new OffscreenCanvas(1920,1080);
       this.ctx = this.canvas.getContext('2d');
       console.log(this.faceDetector)
     },
