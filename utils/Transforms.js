@@ -53,7 +53,7 @@ const encodeVideo = new TransformStream({
       this.ctx.drawImage(frame,0,0)
       const faces = await this.faceDetector.detect(this.canvas)
       const img = new Image();
-      img.src = "/anon.svg"
+      img.src = "/webcodec-recorder/anon.svg"
       for (const face of faces) {
        
         this.ctx.drawImage(img, face.boundingBox.x, face.boundingBox.y, face.boundingBox.width, face.boundingBox.height);
