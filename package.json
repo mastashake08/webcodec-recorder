@@ -16,6 +16,9 @@
   "devDependencies": {
     "@videojs/themes": "^1.0.1",
     "@vite-pwa/nuxt": "^0.9.1",
-    "video.js": "^8.12.0"
+    "video.js": "^8.12.0",
+    "videojs-overlay": "^3.1.0",
+    "videojs-playlist": "^5.1.0",
+    "videojs-playlist-ui": "^5.0.0"
   }
 }

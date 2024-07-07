@@ -2,13 +2,11 @@
   <div>
     <NuxtRouteAnnouncer />
     <video id="preview-video" 
-    class="video video-js vjs-default-skin vjs-controls-enabled"
-    preload="auto"
-    width="1920"
-    height="1080"
+    class="video video-js vjs-default-skin vjs-controls-enabled vjs-has-started vjs-paused vjs-user-inactive"  preload="auto"
     poster="/hacker.svg"
     ></video>
-    <br/>
+    
+    <div class="vjs-playlist"></div>
     <button @click="getMedia()" v-if="!isRecording">Get Media</button>
     <button @click="stop()" v-else>Stop Media</button>
   </div>
@@ -19,16 +17,24 @@ import {detectFace, encodeVideo} from '~/utils/Transforms'
 import videojs from 'video.js';
 import 'video.js/dist/video-js.css';
 import '@videojs/themes/dist/sea/index.css';
-const chunks = [];
-let mediaRecorder;
-
+import * as playlist from 'videojs-playlist';
+import * as playlistUi from 'videojs-playlist-ui';
+import 'videojs-playlist-ui/dist/videojs-playlist-ui.css'
+let video;
+let vid;
 const isRecording = useState('isRecording', () => false)
 
 let stream = null;
 //const worker = new Worker('worker.js');
 onMounted(async () => {
- // const ctx = document.getElementById('preview-canvas').getContext("bitmaprenderer");
-  const devices = await navigator.mediaDevices.enumerateDevices()
+  video = videojs('preview-video', {
+        autoplay: true,
+        controls: true,
+        liveUi: true
+        
+      });
+    vid = video.tech().el();
+    const devices = await navigator.mediaDevices.enumerateDevices()
   
   // worker.onmessage = (e) => {
   //   ctx.transferFromImageBitmap(e.data.bitmap);
@@ -38,8 +44,8 @@ function stop() {
   stream.getTracks().forEach(function(track) {
     track.stop();
   });
-  mediaRecorder.stop()
-    isRecording.value = !isRecording.value;
+
+  isRecording.value = !isRecording.value;
 }
 async function getMedia(constraints = {
     audio: {
@@ -66,23 +72,12 @@ async function getMedia(constraints = {
     isRecording.value = !isRecording.value;
     const newStream = new MediaStream([videoGenerator, audioTrack])
    
-    const video = videojs('preview-video', {
-        autoplay: true,
-        controls: true,
-        liveUi: true
-        
-      });
-      var vid = video.tech().el();
+    
+      
       vid.srcObject = newStream;
    
-    mediaRecorder = new MediaRecorder(newStream);
-    mediaRecorder.onstop = (e) => { 
-      const blob = new Blob(chunks, {type: "video/webm"});
-    }
-    mediaRecorder.ondataavailable = (e) => {
-        chunks.push(e.data);
-      };
-    mediaRecorder.start()
+      video.playlist(video.sources)
+      video.playlistUi()
    
     // const compressedReadableStream = processor.readable.pipeThrough(
     // new CompressionStream("gzip"),

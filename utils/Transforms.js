@@ -11,10 +11,7 @@ const encodeVideo = new TransformStream({
         };
         this.encoder = new VideoEncoder({
         output(chunk, metadata) {
-            console.log(chunk.timestamp);
-            console.log(chunk.byteLength);
-            console.log(JSON.stringify(metadata));
-            console.log(chunk)
+            
             // const buf = new Uint8Array(chunk.byteLength)
             // chunk.copyTo(buf)
             // chunks.push(chunk)
@@ -44,7 +41,7 @@ const encodeVideo = new TransformStream({
       this.faceDetector = new window.FaceDetector();
       this.canvas = new OffscreenCanvas(1920,1080);
       this.ctx = this.canvas.getContext('2d');
-      console.log(this.faceDetector)
+     
     },
     async transform(videoFrame, controller) {
       const frame = videoFrame.clone()
