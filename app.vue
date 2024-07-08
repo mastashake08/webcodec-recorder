@@ -12,7 +12,7 @@
 </template>
 <script setup>
 import { onMounted } from 'vue';
-import {detectFace, encodeVideo} from '~/utils/Transforms'
+import {detectFace, encodeVideo, grabFrames} from '~/utils/Transforms'
 import videojs from 'video.js';
 import 'video.js/dist/video-js.css';
 import '@videojs/themes/dist/sea/index.css';
@@ -83,7 +83,7 @@ async function getMedia(constraints = {
     // const compressedReadableStream = processor.readable.pipeThrough(
     // new CompressionStream("gzip"),
     // );
-    videoProcessor.readable.pipeThrough(detectFace).pipeThrough(encodeVideo).pipeTo(videoGenerator.writable);
+    videoProcessor.readable.pipeThrough(grabFrames).pipeThrough(detectFace).pipeThrough(encodeVideo).pipeTo(videoGenerator.writable);
     
     return {stream, processor: videoProcessor, generator: videoGenerator, compressedReadableStream};
     /* use the stream */

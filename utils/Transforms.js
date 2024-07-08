@@ -63,7 +63,24 @@ const encodeVideo = new TransformStream({
       }
   });
 
+  const grabFrames = new TransformStream({
+    start(controller) {
+      this.videoFrames = []
+     
+    },
+    async transform(videoFrame, controller) {
+      const frame = videoFrame.clone()
+      videoFrame.close()
+      
+      this.videoFrames.push(frame);
+      controller.enqueue(frame);
+      },
+      flush(controller) {
+        console.log(this.videoFrames)
+      }
+  });
   export {
     detectFace,
-    encodeVideo
+    encodeVideo,
+    grabFrames
   }
