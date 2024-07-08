@@ -1,6 +1,6 @@
-# Nuxt 3 Minimal Starter
+# WebCodec Recorder
 
-Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+A Nuxt.js PWA for recording media using the Javascript [WebCodecs API](https://developer.mozilla.org/en-US/docs/Web/API/WebCodecs_API) add face detection filters, export in various encodings and social sharing!
 
 ## Setup
 
