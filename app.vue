@@ -1,6 +1,5 @@
 <template>
   <div>
-    <NuxtRouteAnnouncer />
     <video id="preview-video" 
     class="video video-js vjs-default-skin vjs-controls-enabled vjs-has-started vjs-paused vjs-user-inactive"  preload="auto"
     poster="/hacker.svg"
@@ -30,7 +29,9 @@ onMounted(async () => {
   video = videojs('preview-video', {
         autoplay: true,
         controls: true,
-        liveUi: true
+        liveUi: true,
+        width: 1980,
+        height: 1080
         
       });
     vid = video.tech().el();
